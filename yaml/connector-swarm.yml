@@ -1,0 +1,38 @@
+version: '3.2'
+services:
+  sidekiq:
+    image: artwishlist/sidekiq-alpine
+    hostname: sidekiq
+    environment:
+      REDIS_URL: redis:6379
+      username: admin
+      password: password
+    networks:
+      - streaming
+
+  redis:
+    image: redis:latest
+    hostname: redis
+    networks:
+      - streaming
+
+  connector:
+    image: affix/sidekiq-connector:0.0.1
+    hostname: sidekiq-connector
+    environment:
+      gateway_url: http://gateway:8080
+      queues: "faas-request,"
+      redis_host: redis:6379
+      print_reponse: "true"
+    networks:
+      - streaming
+      - func_functions
+
+networks:
+  streaming:
+    driver: overlay
+    attachable: true
+  func_functions:
+    external: true
+
+

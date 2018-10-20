@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: sidekiq
+    component: sidekiq
+  name: sidekiq
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sidekiq
+        component: sidekiq
+    spec:
+      containers:
+      - name: sidekiq
+        image: artwishlist/sidekiq-alpine:latest
+        ports:
+        - containerPort: 80
+---

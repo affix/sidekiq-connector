@@ -1,0 +1,28 @@
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: sidekiq
+    component: sidekiq-connector
+  name: sidekiq-connector
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sidekiq
+        component: sidekiq-connector
+    spec:
+      containers:
+      - name: kafka
+        image: alexellis2/sidekiq-connector:0.0.1
+        env:
+          - name: gateway_url
+            value: "http://gateway.openfaas:8080"
+          - name: queues
+            value: "faas-request,"
+          - name: redis_host
+            value: "redis:6379"
+          - name: print_response
+            value: "true"

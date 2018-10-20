@@ -1,0 +1,4 @@
+.ash_history
+connector
+sidekiq-connector
+vendor/*
