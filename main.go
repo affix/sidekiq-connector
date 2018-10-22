@@ -46,7 +46,7 @@ func main() {
 
 	for _, queue := range config.queues {
 		handler := makeMessageHandler(&topicMap, config, queue)
-		workers.Process("myqueue", handler, 10)
+		workers.Process(queue, handler, 10)
 	}
 
 	workers.Run()
