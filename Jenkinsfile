@@ -24,6 +24,7 @@ spec:
   node(label) {
     stage('Build Docker image') {
       container('docker') {
+        checkout scm
         sh "docker build -t affixxx/sidekiq-connector:latest ."
       }
     }
