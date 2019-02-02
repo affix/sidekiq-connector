@@ -27,7 +27,7 @@ spec:
         checkout scm
         sh "docker build -t affixxx/sidekiq-connector:latest ."
         if(env.BRANCH_NAME == "master") {
-          withDockerRegistry([ credentialsId: "6544de7e-17a4-4576-9b9b-e86bc1e4f903", url: "" ]) {
+          withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
             sh "docker push affixxx/sidekiq-connector:latest"
           }
         }
