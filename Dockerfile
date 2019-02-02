@@ -1,4 +1,4 @@
-FROM golang:1.9.2-alpine as builder
+FROM golang:1.9.2-alpine
 RUN mkdir -p /go/src/github.com/affix/sidekiq-connector
 RUN apk -U add curl git && \
     curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh && \
