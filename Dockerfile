@@ -20,7 +20,4 @@ RUN go test -v ./...
 # Stripping via -ldflags "-s -w"
 RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags "-s -w" -installsuffix cgo -o ./connector
 
-WORKDIR /
-FROM scratch
-copy --from=builder /go/src/github.com/affix/sidekiq-connector/connector /connector
 CMD ["./connector"]
