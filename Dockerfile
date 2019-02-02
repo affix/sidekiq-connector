@@ -1,9 +1,14 @@
-FROM golang:1.9.2
+FROM golang:1.9.2-alpine as builder
 RUN mkdir -p /go/src/github.com/affix/sidekiq-connector
+RUN apk -U add curl git && \
+    curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh && \
+    apk del curl
 WORKDIR /go/src/github.com/affix/sidekiq-connector
 
 COPY vendor     vendor
 COPY types      types
+COPY Gopkg.lock Gopkg.lock
+COPY Gopkg.toml Gopkg.toml
 COPY main.go    .
 RUN dep ensure
 
@@ -15,4 +20,7 @@ RUN go test -v ./...
 # Stripping via -ldflags "-s -w"
 RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags "-s -w" -installsuffix cgo -o ./connector
 
+WORKDIR /
+FROM scratch
+copy --from=builder /go/src/github.com/affix/sidekiq-connector/connector /connector
 CMD ["./connector"]
