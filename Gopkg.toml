@@ -27,3 +27,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/jrallison/go-workers"
+
+[[constraint]]
+  name = "github.com/openfaas-incubator/connector-sdk"
+  version = "0.3.1"
