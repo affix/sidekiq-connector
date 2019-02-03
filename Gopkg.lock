@@ -2,35 +2,46 @@
 
 
 [[projects]]
+  digest = "1:b520b55fc1146c5b0eea03b07233f7a3d4a9be985c037c91ea6b82ecb81bd521"
   name = "github.com/bitly/go-simplejson"
   packages = ["."]
+  pruneopts = "UT"
   revision = "aabad6e819789e569bd6aabf444c935aa9ba1e44"
   version = "v0.5.0"
 
 [[projects]]
+  digest = "1:0594af97b2f4cec6554086eeace6597e20a4b69466eb4ada25adf9f4300dddd2"
   name = "github.com/garyburd/redigo"
   packages = [
     "internal",
-    "redis"
+    "redis",
   ]
+  pruneopts = "UT"
   revision = "a69d19351219b6dd56f274f96d85a7014a2ec34e"
   version = "v1.6.0"
 
 [[projects]]
   branch = "master"
+  digest = "1:2ed84e4d8015eaf56a29b3ce8512a91973084014061a452d112838351b42364c"
   name = "github.com/jrallison/go-workers"
   packages = ["."]
+  pruneopts = "UT"
   revision = "dbf81d0b75bbe2fd90ef66a07643dd70cb42a88a"
 
 [[projects]]
+  digest = "1:cd4844d2c87206efa7faa9ea920f936e4f16512ac3fa342e7534dfb6d804a63b"
   name = "github.com/openfaas/faas"
   packages = ["gateway/requests"]
+  pruneopts = "UT"
   revision = "75f05ca38efe280e4ec6b36c581e5f0b9e31dcc3"
   version = "0.8.9"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d9e9f5e2f9c9197b4226a8b375c8d11b5f9ba1b4caec452aaf5059a0fae5fb7e"
+  input-imports = [
+    "github.com/jrallison/go-workers",
+    "github.com/openfaas/faas/gateway/requests",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
