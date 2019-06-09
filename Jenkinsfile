@@ -22,12 +22,13 @@ spec:
 
   def image = "jenkins/jnlp-slave"
   node(label) {
-    stage('Build Docker and Push image') {
+    stage('Build Container') {
       container('docker') {
-        checkout scm
-        sh "docker build -t affixxx/sidekiq-connector:latest ."
+        def scmVars = checkout scm
+        sh "docker build -t affixxx/sidekiq-connector:${scmVars.GIT_COMMIT} ."
         if(env.BRANCH_NAME == "master") {
           withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
+            sh "docker tag affixxx/sidekiq-connector:${scmVars.GIT_COMMIT} affixxx/sidekiq-connector:latest"
             sh "docker push affixxx/sidekiq-connector:latest"
           }
         }

@@ -11,12 +11,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/affix/sidekiq-connector/types"
 	"github.com/jrallison/go-workers"
+	"github.com/openfaas-incubator/connector-sdk/types"
 )
 
 type connectorConfig struct {
-	gatewayURL      string
 	upstreamTimeout time.Duration
 	queues          []string
 	printResponse   bool
@@ -30,9 +29,23 @@ func main() {
 	topicMap := types.NewTopicMap()
 
 	lookupBuilder := types.FunctionLookupBuilder{
-		GatewayURL: config.gatewayURL,
-		Client:     types.MakeClient(config.upstreamTimeout),
+		Client: types.MakeClient(config.upstreamTimeout),
 	}
+
+	creds := types.GetCredentials()
+	controllerconfig := &types.ControllerConfig{
+		RebuildInterval:   time.Millisecond * 1000,
+		GatewayURL:        "http://127.0.0.1:8080",
+		PrintResponse:     true,
+		PrintResponseBody: true,
+	}
+
+	controller := types.NewController(creds, controllerconfig)
+
+	receiver := ResponseReceiver{}
+	controller.Subscribe(&receiver)
+
+	controller.BeginMapBuilder()
 
 	ticker := time.NewTicker(config.rebuildInterval)
 	go synchronizeLookups(ticker, &lookupBuilder, &topicMap)
@@ -45,7 +58,7 @@ func main() {
 	})
 
 	for _, queue := range config.queues {
-		handler := makeMessageHandler(&topicMap, config, queue)
+		handler := makeMessageHandler(controller, queue)
 		workers.Process(queue, handler, 10)
 	}
 
@@ -68,13 +81,7 @@ func synchronizeLookups(ticker *time.Ticker,
 	}
 }
 
-func makeMessageHandler(topicMap *types.TopicMap, config connectorConfig, queue string) func(msg *workers.Msg) {
-
-	invoker := types.Invoker{
-		PrintResponse: config.printResponse,
-		Client:        types.MakeClient(config.upstreamTimeout),
-		GatewayURL:    config.gatewayURL,
-	}
+func makeMessageHandler(controller *types.Controller, queue string) func(msg *workers.Msg) {
 
 	mcb := func(msg *workers.Msg) {
 		msgJson, err := json.Marshal(msg.Args)
@@ -82,7 +89,7 @@ func makeMessageHandler(topicMap *types.TopicMap, config connectorConfig, queue 
 		if err != nil {
 			log.Fatal(err.Error())
 		}
-		invoker.Invoke(topicMap, queue, &msgJson)
+		controller.Invoke(queue, &msgJson)
 	}
 	return mcb
 }
@@ -104,11 +111,6 @@ func buildConnectorConfig() connectorConfig {
 	}
 	if len(queues) == 0 {
 		log.Fatal(`Provide a list of queues i.e. queues="payment_published,slack_joined"`)
-	}
-
-	gatewayURL := "http://gateway:8080"
-	if val, exists := os.LookupEnv("gateway_url"); exists {
-		gatewayURL = val
 	}
 
 	upstreamTimeout := time.Second * 30
@@ -134,11 +136,21 @@ func buildConnectorConfig() connectorConfig {
 	}
 
 	return connectorConfig{
-		gatewayURL:      gatewayURL,
 		upstreamTimeout: upstreamTimeout,
 		queues:          queues,
 		rebuildInterval: rebuildInterval,
 		redis_host:      redis,
 		printResponse:   printResponse,
+	}
+}
+
+type ResponseReceiver struct {
+}
+
+func (ResponseReceiver) Response(res types.InvokerResponse) {
+	if res.Error != nil {
+		log.Printf("tester got error: %s", res.Error.Error())
+	} else {
+		log.Printf("tester got result: [%d] %s => %s (%d) bytes", res.Status, res.Topic, res.Function, len(*res.Body))
 	}
 }

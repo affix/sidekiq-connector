@@ -2,35 +2,71 @@
 
 
 [[projects]]
+  digest = "1:b520b55fc1146c5b0eea03b07233f7a3d4a9be985c037c91ea6b82ecb81bd521"
   name = "github.com/bitly/go-simplejson"
   packages = ["."]
+  pruneopts = "UT"
   revision = "aabad6e819789e569bd6aabf444c935aa9ba1e44"
   version = "v0.5.0"
 
 [[projects]]
+  digest = "1:0594af97b2f4cec6554086eeace6597e20a4b69466eb4ada25adf9f4300dddd2"
   name = "github.com/garyburd/redigo"
   packages = [
     "internal",
-    "redis"
+    "redis",
   ]
+  pruneopts = "UT"
   revision = "a69d19351219b6dd56f274f96d85a7014a2ec34e"
   version = "v1.6.0"
 
 [[projects]]
   branch = "master"
+  digest = "1:2ed84e4d8015eaf56a29b3ce8512a91973084014061a452d112838351b42364c"
   name = "github.com/jrallison/go-workers"
   packages = ["."]
+  pruneopts = "UT"
   revision = "dbf81d0b75bbe2fd90ef66a07643dd70cb42a88a"
 
 [[projects]]
+  digest = "1:82fd6a659744e68edc4de79a304f4e4c1262d6c83d38e30e25b764fc19746883"
+  name = "github.com/openfaas-incubator/connector-sdk"
+  packages = ["types"]
+  pruneopts = "UT"
+  revision = "d722c9f72ad06903f416d1bc89878ba5a824b227"
+  version = "0.3.1"
+
+[[projects]]
+  digest = "1:3f69624cb4ae8ab815a672f7d169d64786ee027a9d42eefab3c9d4e9debe0750"
   name = "github.com/openfaas/faas"
   packages = ["gateway/requests"]
-  revision = "75f05ca38efe280e4ec6b36c581e5f0b9e31dcc3"
-  version = "0.8.9"
+  pruneopts = "UT"
+  revision = "a65df4795bc66147c41161c48bfd4c72f60c7434"
+  version = "0.9.14"
+
+[[projects]]
+  digest = "1:deb76da5396c9f641ddea9ca79e31a14bdb09c787cdfda90488768b7539b1fd6"
+  name = "github.com/openfaas/faas-provider"
+  packages = ["auth"]
+  pruneopts = "UT"
+  revision = "220324e98f5db5aa61f02d1ab13f03e91310796c"
+  version = "0.8.1"
+
+[[projects]]
+  digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "ba968bfe8b2f7e042a574c888954fccecfa385b4"
+  version = "v0.8.1"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d9e9f5e2f9c9197b4226a8b375c8d11b5f9ba1b4caec452aaf5059a0fae5fb7e"
+  input-imports = [
+    "github.com/jrallison/go-workers",
+    "github.com/openfaas-incubator/connector-sdk/types",
+    "github.com/openfaas/faas/gateway/requests",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1

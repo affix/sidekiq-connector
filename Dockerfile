@@ -5,7 +5,6 @@ RUN apk -U add curl git && \
     apk del curl
 WORKDIR /go/src/github.com/affix/sidekiq-connector
 
-COPY vendor     vendor
 COPY types      types
 COPY Gopkg.lock Gopkg.lock
 COPY Gopkg.toml Gopkg.toml
